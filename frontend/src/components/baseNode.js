@@ -30,7 +30,7 @@ const BaseNode = ({
             type="target"
             position={Position.Left}
             id={input.id || `${id}-input-${index}`}
-            className="bg-gray-600 border-2 border-white"
+            className="bg-purple border-4 border-white"
             style={{
               top: `${(index + 1) * 25}px`,
               ...input.style
@@ -40,7 +40,7 @@ const BaseNode = ({
       </div>
 
       <div className='flex justify-center items-center'>
-        <label className='m-2 bg-violet-400 text-white p-2 rounded-lg w-full'>
+        <label className='m-2 bg-purple text-white p-2 rounded-lg w-full'>
           <input 
             type="text" 
             value={currentTitle} 
@@ -65,7 +65,7 @@ const BaseNode = ({
             type="source"
             position={Position.Right}
             id={output.id || `${id}-output-${index}`}
-            className="bg-gray-600 border-2 border-white"
+            className="bg-purple border-4"
             style={{
               top: `${(index + 1) * 25}px`,
               ...output.style

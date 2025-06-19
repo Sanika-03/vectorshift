@@ -2,13 +2,14 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        indigo: {
-          800: '#1C2536',
-          700: '#2d3748'
-        }
-      }
-    },
+    colors: {
+      'purple': '#a78bfa',
+      'lavendar': '#E2CFEA',
+      'labelText':'#202774bd',
+      'placeholder': '#5c619b66',
+      'greyBorder':'#20277457',
+    }
+    }
   },
   plugins: [],
 }
