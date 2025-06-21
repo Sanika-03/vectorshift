@@ -5,7 +5,7 @@ import { DraggableNode } from './draggableNode';
 export const PipelineToolbar = () => {
 
     return (
-    <div className="sticky top-0 z-40 w-full bg-gradient-to-b from-white to-[#e1d7ff57] px-6 py-4 border-b border-greyBorder shadow-sm">
+    <div className="sticky top-0 z-20 w-full bg-gradient-to-b from-white to-[#e1d7ff57] px-6 py-4 border-b border-greyBorder shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold text-purple"> Toolbox</h2>
         <span className="text-sm text-labelText">Drag to canvas</span>

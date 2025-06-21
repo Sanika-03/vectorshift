@@ -11,7 +11,6 @@ export const OutputNode = ({ id, data }) => {
     <BaseNode 
       title="Output" 
       id={id}
-      headerColor="bg-red-600"
       inputs={[
         { 
           id: `${id}-value`,
@@ -19,8 +18,6 @@ export const OutputNode = ({ id, data }) => {
           style: { top: '50%' }
         }
       ]}
-      minWidth={200}
-      minHeight={80}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <label>Type</label>
