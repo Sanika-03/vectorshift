@@ -14,6 +14,7 @@ import { ReqNode } from './nodes/reqNode';
 
 import 'reactflow/dist/style.css';
 import { ListNode } from './nodes/listNode';
+import { DateNode } from './nodes/dateNode';
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -23,7 +24,8 @@ const nodeTypes = {
   customOutput: OutputNode,
   text: TextNode,
   http: ReqNode,
-  list: ListNode
+  list: ListNode,
+  date: DateNode,
 };
 
 const selector = (state) => ({

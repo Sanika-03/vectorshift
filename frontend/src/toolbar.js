@@ -13,6 +13,7 @@ export const PipelineToolbar = () => {
                 <DraggableNode type='text' label='Text' />
                 <DraggableNode type='http' label='Request' />
                 <DraggableNode type='list' label='List' />
+                <DraggableNode type='date' label='Date' />
             </div>
         </div>
     );
