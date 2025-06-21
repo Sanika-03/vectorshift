@@ -14,6 +14,7 @@ export const PipelineToolbar = () => {
                 <DraggableNode type='http' label='Request' />
                 <DraggableNode type='list' label='List' />
                 <DraggableNode type='date' label='Date' />
+                <DraggableNode type='image' label='Image Generator' />
             </div>
         </div>
     );

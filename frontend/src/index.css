@@ -19,13 +19,13 @@
     @apply mb-1 text-labelText font-semibold;
   }
   select{
-    @apply h-10 pl-2 border-[1px] rounded-md border-greyBorder bg-white;
+    @apply h-10 pl-2 border-[1px] rounded-md border-greyBorder bg-white focus:outline-none;
   }
   input{
-    @apply h-10 rounded-md;
+    @apply h-10 rounded-md focus:outline-none;
   }
   textarea{
-    @apply h-14 pl-2 border-[1px] rounded-md border-greyBorder;
+    @apply h-14 pl-2 border-[1px] rounded-md border-greyBorder focus:outline-none;
   }
   option {
     @apply mb-1 text-labelText;

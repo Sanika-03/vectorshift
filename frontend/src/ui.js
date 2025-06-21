@@ -10,11 +10,12 @@ import { InputNode } from './nodes/inputNode';
 import { LLMNode } from './nodes/llmNode';
 import { OutputNode } from './nodes/outputNode';
 import { TextNode } from './nodes/textNode';
-import { ReqNode } from './nodes/reqNode';
 
 import 'reactflow/dist/style.css';
+import { ReqNode } from './nodes/reqNode';
 import { ListNode } from './nodes/listNode';
 import { DateNode } from './nodes/dateNode';
+import { ImageNode } from './nodes/imageGenerator';
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -26,6 +27,7 @@ const nodeTypes = {
   http: ReqNode,
   list: ListNode,
   date: DateNode,
+  image: ImageNode
 };
 
 const selector = (state) => ({
