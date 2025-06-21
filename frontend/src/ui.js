@@ -16,6 +16,7 @@ import { ReqNode } from './nodes/reqNode';
 import { ListNode } from './nodes/listNode';
 import { DateNode } from './nodes/dateNode';
 import { ImageNode } from './nodes/imageGenerator';
+import { DBNode } from './nodes/DBNode';
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -27,7 +28,8 @@ const nodeTypes = {
   http: ReqNode,
   list: ListNode,
   date: DateNode,
-  image: ImageNode
+  image: ImageNode,
+  db: DBNode
 };
 
 const selector = (state) => ({
@@ -98,7 +100,7 @@ export const PipelineUI = () => {
 
     return (
         <>
-        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh'}}>
+        <div ref={reactFlowWrapper} style={{width: '100wv', height: '80vh'}}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -113,7 +115,7 @@ export const PipelineUI = () => {
                 snapGrid={[gridSize, gridSize]}
                 connectionLineType='smoothstep'
             >
-                <Background color="#aaa" gap={gridSize} />
+                <Background color="#a78bfa" gap={gridSize} />
                 <Controls />
                 <MiniMap />
             </ReactFlow>
