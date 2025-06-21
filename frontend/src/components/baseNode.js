@@ -1,84 +1,124 @@
-import React from 'react';
-import { useState } from 'react';
-import { Handle, Position } from 'reactflow';
+import React, { useState, useRef, useEffect } from 'react';
+import BaseNode from '../components/baseNode';
+import { useReactFlow } from 'reactflow';
+import { useStore } from '../store';
 
-const BaseNode = ({ 
-  title, 
-  id, 
-  data, 
-  inputs = [], 
-  outputs = [], 
-  children,
-  minWidth = 240,
-  minHeight = 'auto'
-}) => {
-    const [currentTitle, setcurrentTitle] = useState(data?.inputName || id.replace('customInput-', 'input_'));
-    
+export const TextNode = ({ id, data }) => {
+  const textareaRef = useRef(null);
+  const [text, setText] = useState(data?.text || '');
+  const [variables, setVariables] = useState([]);
+  const updateNodeField = useStore(state => state.updateNodeField);
+  const { getNodes, getEdges, addEdges, deleteElements } = useReactFlow();
+
+  // Extract variables from {{variable}} syntax
+  const extractVariables = () => {
+    const regex = /\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}/g;
+    const matches = new Set();
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      matches.add(match[1]);
+    }
+    return [...matches];
+  };
+
+  const getAllNodeNames = () => {
+    return getNodes().map(node =>
+      node.type === 'customInput' && node.data?.inputName
+        ? node.data.inputName
+        : node.id
+    );
+  };
+
+  const getMatchingNode = (varName) => {
+    return getNodes().find(
+      node => node.data?.inputName === varName || node.id === varName
+    );
+  };
+
+  useEffect(() => {
+    const allNodeNames = getAllNodeNames();
+    const extractedVars = extractVariables();
+    setVariables(extractedVars);
+    updateNodeField(id, 'text', text);
+    updateNodeField(id, 'variables', extractedVars);
+
+    const currentEdges = getEdges();
+
+    // Remove any existing edges from this TextNode not matching current variables
+    const textNodeEdges = currentEdges.filter(edge => edge.target === id);
+    const validHandles = extractedVars.map(v => `${id}-${v}`);
+
+    const edgesToRemove = textNodeEdges.filter(
+      edge => !validHandles.includes(edge.targetHandle)
+    );
+
+    if (edgesToRemove.length) {
+      deleteElements({ edges: edgesToRemove });
+    }
+
+    // Create new edges where necessary
+    extractedVars.forEach(varName => {
+      const sourceNode = getMatchingNode(varName);
+      if (!sourceNode) return;
+
+      const sourceHandle = 'text';
+      const targetHandle = `${id}-${varName}`;
+
+      const alreadyConnected = currentEdges.some(edge =>
+        edge.source === sourceNode.id &&
+        edge.target === id &&
+        edge.sourceHandle === sourceHandle &&
+        edge.targetHandle === targetHandle
+      );
+
+      if (!alreadyConnected) {
+        addEdges([{
+          id: `edge-${sourceNode.id}-${id}-${varName}`,
+          source: sourceNode.id,
+          sourceHandle,
+          target: id,
+          targetHandle,
+          type: 'default'
+        }]);
+      }
+    });
+  }, [text, getNodes]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.max(80, textareaRef.current.scrollHeight)}px`;
+    }
+  }, [text]);
+
+  const validVariables = variables.filter(v => getMatchingNode(v));
+
   return (
-    <div 
-      className="relative bg-white rounded-lg shadow-sm border border-gray-200"
-      style={{ minWidth: `${minWidth}px`, minHeight }}
+    <BaseNode
+      title="Text Template"
+      id={id}
+      headerColor="bg-green-500"
+      inputs={validVariables.map((varName, index) => ({
+        id: `${id}-${varName}`,
+        label: varName,
+        style: { top: `${40 + index * 30}px` }
+      }))}
+      outputs={[{ id: `${id}-output` }]}
+      minWidth={260}
     >
-      <div className="px-3 py-2 bg-gray-50 text-xs text-gray-500 border-t border-gray-200">
-        {title}
-      </div>
-      
-      <div className="absolute left-0 top-1/2 transform -translate-y-1/2">
-        {inputs.map((input, index) => (
-          <Handle
-            key={input.id || `${id}-input-${index}`}
-            type="target"
-            position={Position.Left}
-            id={input.id || `${id}-input-${index}`}
-            className="bg-purple border-4 border-white"
-            style={{
-              top: `${(index + 1) * 25}px`,
-              ...input.style
-            }}
+      <div className="space-y-4">
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">Template Text</label>
+          <textarea
+            ref={textareaRef}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Enter text with {{variables}}"
+            rows={3}
           />
-        ))}
+        </div>
       </div>
-
-      <div className='flex justify-center items-center'>
-        <label className='m-2 bg-purple text-white p-2 rounded-lg w-full'>
-          <input 
-            type="text" 
-            value={currentTitle} 
-            onChange={(e) => setcurrentTitle(e.target.value)} 
-            className="node-input bg-inherit text-center"
-          />
-        </label>
-      </div>
-
-      <div className="p-3">
-        {children || (
-          <div className="text-gray-600">
-            {data?.description || `${title} node`}
-          </div>
-        )}
-      </div>
-
-      <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-        {outputs.map((output, index) => (
-          <Handle
-            key={output.id || `${id}-output-${index}`}
-            type="source"
-            position={Position.Right}
-            id={output.id || `${id}-output-${index}`}
-            className="bg-purple border-4"
-            style={{
-              top: `${(index + 1) * 25}px`,
-              ...output.style
-            }}
-          />
-        ))}
-      </div>
-
-    {/* <div className="px-3 py-2 bg-gray-50 text-xs text-gray-500 border-t border-gray-200">
-        {id}
-      </div> */}
-    </div>
+    </BaseNode>
   );
 };
-
-export default BaseNode;

@@ -6,10 +6,11 @@ export const ReqNode = ({ id, data }) => {
 
   return (
     <BaseNode 
-      title="Input" 
+      title="HTTP Request" 
       id={id}
       inputs={[]}
       outputs={[{ id: `${id}-value` }]}
+      minWidth='450'
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <label> Method </label>
@@ -28,22 +29,22 @@ export const ReqNode = ({ id, data }) => {
         <label> URL </label>
         <input 
           type="text" 
-          value={data.url || ''}
-          onChange={(e) => data.setUrl(e.target.value)}
-          className="node-input"
+        //   value={data.url || ''}
+        //   onChange={(e) => data.setUrl(e.target.value)}
+          className="node-input pl-2 border-[1px] rounded-md border-greyBorder"
           placeholder="Enter URL"
         />
         <label> Headers </label>
         <textarea 
-          value={data.headers || ''}
-          onChange={(e) => data.setHeaders(e.target.value)}
+        //   value={data.headers || ''}
+        //   onChange={(e) => data.setHeaders(e.target.value)}
           className="node-textarea"
           placeholder="Enter headers in JSON format"
         />
         <label> Body </label>
         <textarea 
-          value={data.body || ''}
-          onChange={(e) => data.setBody(e.target.value)}
+        //   value={data.body || ''}
+        //   onChange={(e) => data.setBody(e.target.value)}
           className="node-textarea"
           placeholder="Enter body in JSON format"
         />        

@@ -22,7 +22,7 @@
     @apply h-10 pl-2 border-[1px] rounded-md border-greyBorder bg-white;
   }
   input{
-    @apply h-8 rounded-md;
+    @apply h-10 rounded-md;
   }
   textarea{
     @apply h-14 pl-2 border-[1px] rounded-md border-greyBorder;
