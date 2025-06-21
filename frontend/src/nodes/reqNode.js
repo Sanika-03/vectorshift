@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BaseNode from '../components/baseNode';
 
 export const ReqNode = ({ id, data }) => {
-  const [inputType, setInputType] = useState(data.inputType || 'Text');
+  const [inputType, setInputType] = useState(data.inputType || 'HTTP Request');
 
   return (
     <BaseNode 

@@ -1,6 +1,7 @@
 import { PipelineToolbar } from './toolbar';
 import { PipelineUI } from './ui';
 import { SubmitButton } from './submit';
+import "boxicons"
 
 function App() {
   return (

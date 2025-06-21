@@ -4,7 +4,7 @@ module.exports = {
     extend: {
     colors: {
       'purple': '#a78bfa',
-      'lavendar': '#E2CFEA',
+      'lavendar': '#a78bfa45',
       'labelText':'#202774bd',
       'placeholder': '#5c619b66',
       'greyBorder':'#20277457',

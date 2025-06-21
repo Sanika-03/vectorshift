@@ -13,6 +13,7 @@ import { TextNode } from './nodes/textNode';
 import { ReqNode } from './nodes/reqNode';
 
 import 'reactflow/dist/style.css';
+import { ListNode } from './nodes/listNode';
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -21,7 +22,8 @@ const nodeTypes = {
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
-  http: ReqNode
+  http: ReqNode,
+  list: ListNode
 };
 
 const selector = (state) => ({
