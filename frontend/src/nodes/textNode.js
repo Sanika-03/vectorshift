@@ -1,41 +1,69 @@
 // src/nodes/TextNode.js
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useRef as useReactRef } from 'react';
 import BaseNode from '../components/baseNode';
 import { Handle, Position, useReactFlow } from 'reactflow';
 import { useStore } from '../store';
 
 export const TextNode = ({ id, data }) => {
   const textareaRef = useRef(null);
+  const oldVariableRef = useReactRef([]);
   const [text, setText] = useState(data?.text || '');
   const [variables, setVariables] = useState([]);
   const updateNodeField = useStore(state => state.updateNodeField);
-  const { getNodes } = useReactFlow();
+  const onConnect = useStore(state => state.onConnect);
+  const { getNodes, getEdges, setEdges } = useReactFlow();
 
   const extractValidVariables = () => {
     const regex = /\{\{\s*([a-zA-Z_][a-zA-Z0-9_-]*)\s*\}\}/g;
     const matches = [];
     let match;
-  
+
     while ((match = regex.exec(text)) !== null) {
       matches.push(match[1].trim());
     }
-  
+
     const validNodeIds = getNodes()
       .filter(node => node?.data?.nodeType === 'customInput')
       .map(node => node.id);
-  
-    // console.log('Valid node IDs:', validNodeIds);
-  
+
     const validMatches = matches.filter(name => validNodeIds.includes(name));
-    // console.log('Valid Matches:', validMatches);
-  
     return [...new Set(validMatches)];
   };
 
   useEffect(() => {
     const newVariables = extractValidVariables();
+    const oldVariables = oldVariableRef.current;
+    const existingEdges = getEdges();
+
+    // Remove edges for deleted variables
+    const updatedEdges = existingEdges.filter(
+      edge =>
+        !(
+          edge.target === id &&
+          oldVariables.includes(edge.source) &&
+          !newVariables.includes(edge.source)
+        )
+    );
+    setEdges(updatedEdges);
+
+    // Add edges for new variables
+    newVariables.forEach(varName => {
+      const alreadyConnected = updatedEdges.some(
+        edge => edge.source === varName && edge.target === id
+      );
+
+      if (!alreadyConnected) {
+        onConnect({
+          source: varName,
+          target: id,
+          sourceHandle: null,
+          targetHandle: varName,
+        });
+      }
+    });
+
     setVariables(newVariables);
-    // console.log(getNodes());
+    oldVariableRef.current = newVariables;
 
     updateNodeField(id, 'text', text);
     updateNodeField(id, 'variables', newVariables);
